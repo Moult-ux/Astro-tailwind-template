@@ -1,0 +1,77 @@
+---
+// Component Imports
+import Layout from '../layout/Layout.astro';
+import FeatureBlock from '../components/FeatureBlock.astro';
+import ApplicationFeaturesImageLeft from '../components/ApplicationFeaturesImageLeft.astro';
+import ApplicationFeaturesImageRight from '../components/ApplicationFeaturesImageRight.astro';
+
+import {client} from '../lib/sanityClient.js';
+
+const homePageQuery = `*[_type == 'page'  && slug.current == "home"]`;
+const homePage = (await client.fetch(homePageQuery))[0];
+
+//console.log(homePage);
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/core-concepts/astro-components/
+---
+<!-- 
+
+{JSON.stringify(homePage, null, 2)} -->
+
+
+<Layout title="Titre de Weenove">
+{homePage.blockList.map(block => (
+  (() => {  
+           switch (block.astroTemplateName) {
+              case 'ApplicationFeaturesImageLeft':
+                  return (
+                    <ApplicationFeaturesImageLeft 
+						templateBlock = {block}
+					/>
+                  )
+              case 'ApplicationFeaturesImageRight':
+                  return (
+                    <div>You are a Manager.</div>
+                  )
+              default:
+                  return (
+                    <div>No template found</div>
+                  )
+           }
+  
+        })()
+    
+))}
+
+<!-- 
+
+  <FeatureBlock
+	title="Embedded analytics for ISV and digital companies"
+	content="Embed dashboards in any application or website. Impress your customers by delivering top notch analytics right in your application."
+	imageUrl="flex-ui-assets/images/features/stock2.png"
+  />
+<ApplicationFeaturesImageLeft 
+	title="Embedded analytics for ISV and digital companies"
+	content="Embed dashboards in any application or website. Impress your customers by delivering top notch analytics right in your application."
+	imageUrl="flex-ui-assets/elements/dashboard.png"
+	feat1Title="Feat 1"
+	feat1Description = ""
+	feat2Title = ""
+	feat2Description = ""
+	feat3Title = ""
+	feat3Description = ""
+/>
+<ApplicationFeaturesImageRight 
+	title="Embedded analytics for ISV and digital companies"
+	content="Embed dashboards in any application or website. Impress your customers by delivering top notch analytics right in your application."
+	imageUrl="flex-ui-assets/elements/dashboard.png"
+	feat1Title="Feat 4"
+	feat1Description = ""
+	feat2Title = ""
+	feat2Description = ""
+	feat3Title = ""
+	feat3Description = ""
+/> -->
+
+</Layout>
